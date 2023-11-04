@@ -66,7 +66,7 @@ jobs:
           -n ${{ env.NAMESPACE }} -o yaml | \
           kubectl apply -f - 
 
-    - name: Create or Patch docker pull secret
+    - name: Create or Patch db secret
       run: |
         kubectl create secret generic db-url \
           --save-config --dry-run=client \
