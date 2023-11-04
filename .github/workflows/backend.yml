@@ -70,7 +70,7 @@ jobs:
       run: |
         kubectl create secret generic db-url \
           --save-config --dry-run=client \
-          ----from-literal=url=${{ secrets.DB_URL }} \
+          --from-literal=url=${{ secrets.DB_URL }} \
           -n ${{ env.NAMESPACE }} -o yaml | \
           kubectl apply -f -             
 
