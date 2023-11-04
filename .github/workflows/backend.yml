@@ -1,6 +1,6 @@
 # This is a workflow that is build and deploy the backend
 
-name: backend
+name: Backend
 
 on:
   workflow_dispatch:
