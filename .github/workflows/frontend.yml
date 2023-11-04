@@ -39,6 +39,11 @@ jobs:
         echo ${{ secrets.REGISTRY_SECRET }} | docker login ${{ env.REGISTRY }} -u ${{ env.REGISTRY_USER }} --password-stdin 
         docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}    
 
+    - uses: azure/k8s-set-context@v3
+      with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
     - name: Create or Patch docker pull secret
       run: |
         kubectl create secret docker-registry docker-pull-secret \
