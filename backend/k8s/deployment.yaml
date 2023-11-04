@@ -15,7 +15,7 @@ spec:
       containers:
         - name: backend
           image: 3a7jouokyffroregistry.azurecr.io/palansa/backend:latest
-          imagePullPolicy: "IfNotPresent"
+          imagePullPolicy: "Always"
           ports:
             - containerPort: 8000  # Exposes container port    
           env:

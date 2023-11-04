@@ -47,7 +47,7 @@ jobs:
     - name: Create or Patch docker pull secret
       run: |
         kubectl create secret docker-registry docker-pull-secret \
-          --dry-run=client \
+          --save-config --dry-run=client \
           --docker-username=${{ env.REGISTRY_USER }} \
           --docker-password=${{ secrets.REGISTRY_SECRET }} \
           --docker-email=cap-days@mail.com \
@@ -58,7 +58,7 @@ jobs:
     - name: Create or Patch ngnix.conf
       run: |
         kubectl create configmap nginx 
-        --dry-run=client \
+        --save-config --dry-run=client \
         --from-file=nginx.conf \
         -n ${{ env.NAMESPACE }} -o yaml | \
         kubectl apply -f - 
