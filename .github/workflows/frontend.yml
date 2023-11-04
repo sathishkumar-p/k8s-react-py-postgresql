@@ -69,7 +69,7 @@ jobs:
     - name: Create or Patch ngnix.conf
       working-directory: ./frontend
       run: |
-        kubectl create configmap nginx 
+        kubectl create configmap nginx \
         --save-config --dry-run=client \
         --from-file=nginx.conf \
         -n ${{ env.NAMESPACE }} -o yaml | \
