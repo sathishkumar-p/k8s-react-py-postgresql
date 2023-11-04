@@ -1,6 +1,6 @@
-# This is a workflow that is build and deploy the frontend
+# This is a workflow that is build and deploy the backend
 
-name: Frontend
+name: backend
 
 on:
   workflow_dispatch:
@@ -8,12 +8,12 @@ on:
     branches:
       - main 
     paths:
-      - 'frontend/**'       
+      - 'backend/**'       
 
 env:
   REGISTRY: 3a7jouokyffroregistry.azurecr.io
   REGISTRY_USER: 3a7jouokyffroregistry
-  IMAGE_NAME: palansa/frontend:latest   
+  IMAGE_NAME: palansa/backend:latest   
   NAMESPACE: palansa
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -30,7 +30,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Docker Build
-      working-directory: ./frontend
+      working-directory: ./backend
       run: |
         docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} -f ./Dockerfile .
     
@@ -65,17 +65,16 @@ jobs:
           --docker-server=${{ env.REGISTRY }} \
           -n ${{ env.NAMESPACE }} -o yaml | \
           kubectl apply -f - 
-        
-    - name: Create or Patch ngnix.conf
-      working-directory: ./frontend
-      run: |
-        kubectl create configmap nginx 
-        --save-config --dry-run=client \
-        --from-file=nginx.conf \
-        -n ${{ env.NAMESPACE }} -o yaml | \
-        kubectl apply -f - 
 
-    - name: Deploy Frontend
-      working-directory: ./frontend/k8s
+    - name: Create or Patch docker pull secret
+      run: |
+        kubectl create secret generic db-url \
+          --save-config --dry-run=client \
+          --url=${{ secrets.DB_URL }} \
+          -n ${{ env.NAMESPACE }} -o yaml | \
+          kubectl apply -f -             
+
+    - name: Deploy backend
+      working-directory: ./backend/k8s
       run: |
         kubectl apply -f .  -n ${{ env.NAMESPACE }}

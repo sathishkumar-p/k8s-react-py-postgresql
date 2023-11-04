@@ -20,6 +20,9 @@ spec:
             - containerPort: 8000  # Exposes container port    
           env:
             - name: DATABASE_URL
-              value: postgresql://postgres:123456789@postgres.palansa/blogData             
+              valueFrom:
+                secretKeyRef:
+                  name: db-url
+                  key: url
       imagePullSecrets:
       - name: docker-pull-secret
