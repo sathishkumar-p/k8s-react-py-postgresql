@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend  # Sets Deployment name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: 3a7jouokyffroregistry.azurecr.io/palansa/backend:latest
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 8000  # Exposes container port    
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:123456789@postgres.palansa/blogData             
+      imagePullSecrets:
+      - name: docker-pull-secret
